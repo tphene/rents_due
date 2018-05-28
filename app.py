@@ -9,8 +9,8 @@ app = Flask(__name__)
 
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 
-AWS_ACCESS_KEY_ID = 'AKIAIRLADU53Z2ZGFKFQ'
-AWS_SECRET_ACCESS_KEY = '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'
+AWS_ACCESS_KEY_ID = ''
+AWS_SECRET_ACCESS_KEY = ''
 
 # bucket_name = AWS_ACCESS_KEY_ID.lower() + '-dump'
 
