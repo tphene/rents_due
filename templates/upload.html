@@ -9,7 +9,7 @@
 <form id="upload-form" action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data">
 
     <strong>Files:</strong><br>
-    <input id="file-picker" type="file" name="file" accept="image/*" multiple>
+    <input id="file-picker" type="file" name="file" accept="text/*" multiple>
     <div id="msg"></div>
     <input type="submit" value="Upload!" id="upload-button">
 </form>
@@ -25,7 +25,7 @@
         //koala.jpg, koala.JPG substring(index) lastIndexOf('a') koala.1.jpg
             var ext= input.files[i].name.substring(input.files[i].name.lastIndexOf('.')+1).toLowerCase()
 
-            if ((ext == 'jpg') || (ext == 'png'))
+            if ((ext == 'txt') || (ext == 'rtf') || (ext == 'java'))
             {
                 $("#msg").text("Files are supported")
             }
