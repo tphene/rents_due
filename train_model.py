@@ -4,6 +4,7 @@ import os
 import pandas as pd
 import numpy as np
 import re
+import cPickle as pickle
 from sklearn.cross_validation import train_test_split
 import tensorflow as tf
 import keras
@@ -15,7 +16,7 @@ from keras.wrappers.scikit_learn import KerasClassifier
 
 
 ## Load Dictionary
-dictionary = open("dictionary.txt").read().lower()
+dictionary = open("/Users/neil/Documents/Mary/dictionary.txt").read().lower()
 dictionary = dictionary.split(" . ")
 len(dictionary)
 
@@ -54,6 +55,19 @@ def stem_docs(df):
         docs.append(doc)
     df = pd.DataFrame(docs,columns=['text'])
     return df
+
+#def lemmatize_docs(df):
+#    docs = []
+#    for enum,doc in enumerate(list(df['text'])):
+#        if enum % 1000 == 0:
+#            print(enum)
+#        doc = clean_doc(str(doc))
+#        doc = doc.split(" ")
+#        doc = [stemmer.stem(word).strip() for word in doc]
+#        doc = " ".join(doc)
+#        docs.append(doc)
+#    df = pd.DataFrame(docs,columns=['text'])
+#    return df
 
 
 ## Load Relevant CSVs
@@ -111,8 +125,10 @@ df = df.sample(frac=1)
 
 ## Get TFIDF DF
 def get_tfidf(corpus, dictionary):
-    tfidf = TfidfVectorizer(ngram_range=(1,1), vocabulary=dictionary, lowercase=True)
+    tfidf = TfidfVectorizer(ngram_range=(1,5), vocabulary=dictionary, lowercase=True)
     tfidf = tfidf.fit(corpus)
+    with open('/Users/neil/workplace/tfidf.pk', 'wb') as f:
+        pickle.dump(tfidf, f)
     data = tfidf.transform(corpus).todense()
     tfidf_cols = tfidf.get_feature_names()
     df = pd.DataFrame(data, columns=tfidf_cols)
@@ -135,7 +151,7 @@ for idx in indexes:
 
 ## split the df into chunks of 100,000
 for num in range(int(np.ceil(len(tfidf_df)/100000.0))):
-    f = 'tfidf/tfidf' + str(num) + ".csv"
+    f = '/Users/neil/Documents/Mary/tfidf/tfidf' + str(num) + ".csv"
     start = num*100000
     end = (num+1)*100000
     tfidf_df[start:end].to_csv(f)
@@ -180,3 +196,7 @@ def nn(dictionary):
 
 
 model = nn(dictionary)
+
+#model.save("Users/neil/workplace/model.h5")
+model.save_weights("Users/neil/workplace/weights.h5")
+model.save_json("Users/neil/workplace/json.h5")
